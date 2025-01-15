@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Мой Telegram Mini App</title>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <style>
+        body { text-align: center; font-family: Arial, sans-serif; }
+        button { padding: 10px 20px; font-size: 18px; margin-top: 10px; }
+        input { display: block; margin: 5px auto; padding: 10px; font-size: 16px; width: 80%; }
+    </style>
+</head>
+<body>
+    <h1>Добро пожаловать!</h1>
+    <p id="user-info"></p>
+
+    <form id="data-form">
+        <input type="text" id="name" placeholder="Наименование" required>
+        <input type="date" id="deadline" placeholder="Срок подачи документов ДО МСК" required>
+        <input type="number" id="amount" placeholder="Сумма тендера" required>
+        <input type="url" id="link" placeholder="Внешняя ссылка на тендер" required>
+        <input type="text" id="notes" placeholder="Дополнения">
+        <input type="text" id="region" placeholder="Регион" required>
+        <input type="text" id="doc_status" placeholder="Состояние документации" required>
+        <input type="number" id="counter" placeholder="Расчетчик">
+        <input type="text" id="fz" placeholder="ФЗ">
+        <button type="submit">Отправить данные</button>
+    </form>
+
+    <script>
+        let tg = window.Telegram.WebApp;
+        tg.expand(); // Разворачивает приложение на весь экран
+        
+        // Отображение информации о пользователе
+        document.getElementById("user-info").innerText = `Привет, ${tg.initDataUnsafe.user?.first_name || 'Гость'}!`;
+
+        // Функция расчета оставшихся дней
+        function calculateDaysLeft() {
+            let deadline = new Date(document.getElementById("deadline").value);
+            let today = new Date();
+            let timeDiff = deadline - today;
+            return Math.ceil(timeDiff / (1000 * 60 * 60 * 24)); // Перевод в дни
+        }
+
+        // Функция отправки данных в Google Sheets
+        function sendDataToGoogleSheets(data) {
+            const url = "https://script.google.com/macros/s/AKfycbz1gNm8JXVJJerCuYKV3lYBzkkqNdNL2-nlN9srryMMYKxoc0_DFx9SmWtVOB-bIbuNGg/exec"; // Вставьте ваш URL из Google Apps Script
+            
+            fetch(url, {
+                method: "POST",
+                body: JSON.stringify(data),
+                headers: { "Content-Type": "application/json" }
+            })
+            .then(response => response.json())
+            .then(data => console.log("Success:", data))
+            .catch(error => console.error("Error:", error));
+        }
+
+        // Обработчик отправки формы
+        document.getElementById("data-form").addEventListener("submit", function (event) {
+            event.preventDefault(); // Предотвращаем перезагрузку страницы
+            
+            let formData = {
+                id_unique: Date.now(),
+                name: document.getElementById("name").value,
+                deadline: document.getElementById("deadline").value,
+                days_left: calculateDaysLeft(),
+                amount: document.getElementById("amount").value,
+                link: document.getElementById("link").value,
+                notes: document.getElementById("notes").value,
+                region: document.getElementById("region").value,
+                doc_status: document.getElementById("doc_status").value,
+                counter: document.getElementById("counter").value,
+                fz: document.getElementById("fz").value
+            };
+
+            sendDataToGoogleSheets(formData);
+        });
+    </script>
+</body>
+</html>
