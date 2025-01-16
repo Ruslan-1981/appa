@@ -31,19 +31,6 @@
     </form>
 
     <script>
-        // import winston from 'winston';
-        
-        const logger = winston.createLogger({
-          level: 'info',
-          format: winston.format.json(),
-          defaultMeta: { service: 'user-data' },
-          transports: [
-            new winston.transports.Console()
-          ],
-        });
-        
-        logger.info('Пользователь заполнил форму');
-        
         let tg = window.Telegram.WebApp;
         tg.expand(); // Разворачивает приложение на весь экран
         
@@ -61,7 +48,9 @@
         // Функция отправки данных в Google Sheets
         function sendDataToGoogleSheets(data) {
             const url = "https://script.google.com/macros/s/AKfycbz1gNm8JXVJJerCuYKV3lYBzkkqNdNL2-nlN9srryMMYKxoc0_DFx9SmWtVOB-bIbuNGg/exec"; // Вставьте ваш URL из Google Apps Script
-            
+            console.log(url);
+            console.log(data);
+
             fetch(url, {
                 redirect: "follow",
                 method: "POST",
