@@ -31,6 +31,18 @@
     </form>
 
     <script>
+        const winston = require('winston');
+
+        const logger = winston.createLogger({
+          level: 'info',
+          format: winston.format.json(),
+          defaultMeta: { service: 'user-data' },
+          transports: [
+            new winston.transports.Console()
+          ],
+        });
+        logger.info('Пользователь заполнил форму');
+        
         let tg = window.Telegram.WebApp;
         tg.expand(); // Разворачивает приложение на весь экран
         
