@@ -31,8 +31,8 @@
     </form>
 
     <script>
-        const winston = require('winston');
-
+        import winston from 'winston';
+        
         const logger = winston.createLogger({
           level: 'info',
           format: winston.format.json(),
@@ -41,6 +41,7 @@
             new winston.transports.Console()
           ],
         });
+        
         logger.info('Пользователь заполнил форму');
         
         let tg = window.Telegram.WebApp;
