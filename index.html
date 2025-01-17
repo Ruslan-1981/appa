@@ -82,7 +82,7 @@
         let formData = {
             id_unique: Date.now(),
             name: document.getElementById("name").value,
-            deadline: document.getElementById("deadline_d"+"deadline_t").value,
+            deadline: document.getElementById("deadline_d").value + " " + document.getElementById("deadline_t").value, // ✅ Объединяем без форматирования
             amount: document.getElementById("amount").value,
             link: document.getElementById("link").value,
             notes: document.getElementById("notes").value,
