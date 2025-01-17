@@ -56,11 +56,12 @@
                         });
             fetch(url, {
                 method: "POST",
+                mode: "no-cors",  // 🚀 Отключаем CORS
                 body: JSON.stringify(data),
                 headers: { "Content-Type": "application/json" }
             })
             .then(response => response.json())
-            .then(data => console.log("Success:", data))
+            // .then(data => console.log("Success:", data))
             .catch(error => console.error("Error:", error));
         }
 
