@@ -18,7 +18,8 @@
     <form id="data-form">
         <input type="url" id="link" placeholder="Внешняя ссылка на тендер" required>
         <input type="text" id="name" placeholder="Наименование" required>
-        <input type="date" id="deadline" placeholder="Срок подачи документов ДО МСК" required>
+        <input type="date" id="deadline_d" placeholder="Срок подачи документов ДО дата" required>
+        <input type="time" id="deadline_t" placeholder="Срок подачи документов ДО время МСК" required>
         <input type="number" id="amount" placeholder="Сумма тендера" required>
         <input type="text" id="region" placeholder="Регион" required>
         <input type="text" id="notes" placeholder="Дополнения">
@@ -81,7 +82,7 @@
         let formData = {
             id_unique: Date.now(),
             name: document.getElementById("name").value,
-            deadline: document.getElementById("deadline").value,
+            deadline: document.getElementById("deadline_d"+"deadline_t").value,
             amount: document.getElementById("amount").value,
             link: document.getElementById("link").value,
             notes: document.getElementById("notes").value,
