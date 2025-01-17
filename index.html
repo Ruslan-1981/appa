@@ -30,24 +30,25 @@
         <button type="submit">Отправить данные</button>
     </form>
 
-    <script>
-        let tg = window.Telegram.WebApp;
-        tg.expand(); // Разворачивает приложение на весь экран
-        
-        // Отображение информации о пользователе
-        document.getElementById("user-info").innerText = `Привет, ${tg.initDataUnsafe.user?.first_name || 'Гость'}!`;
+<script>
+    let tg = window.Telegram.WebApp;
+    tg.expand(); // Разворачивает приложение на весь экран
+    
+    // Отображение информации о пользователе
+    document.getElementById("user-info").innerText = `Привет, ${tg.initDataUnsafe.user?.first_name || 'Гость'}!`;
 
-        // Функция расчета оставшихся дней
-        function calculateDaysLeft() {
-            let deadline = new Date(document.getElementById("deadline").value);
-            let today = new Date();
-            let timeDiff = deadline - today;
-            return Math.ceil(timeDiff / (1000 * 60 * 60 * 24)); // Перевод в дни
-        }
+    // Функция расчета оставшихся дней
+    function calculateDaysLeft() {
+        let deadline = new Date(document.getElementById("deadline").value);
+        let today = new Date();
+        let timeDiff = deadline - today;
+        return Math.ceil(timeDiff / (1000 * 60 * 60 * 24)); // Перевод в дни
+    }
 
-        // Функция отправки данных в Google Sheets
-        function sendDataToGoogleSheets(data) {
-            const url = "https://script.google.com/macros/s/AKfycbz1gNm8JXVJJerCuYKV3lYBzkkqNdNL2-nlN9srryMMYKxoc0_DFx9SmWtVOB-bIbuNGg/exec"; // Вставьте ваш URL из Google Apps Script
+    // Функция отправки данных в Google Sheets
+    function sendDataToGoogleSheets(data) {
+        const url = "https://script.google.com/macros/s/AKfycbz1gNm8JXVJJerCuYKV3lYBzkkqNdNL2-nlN9srryMMYKxoc0_DFx9SmWtVOB-bIbuNGg/exec"; // Вставьте ваш URL
+
         fetch(url, {
             method: "POST",
             mode: "no-cors",
@@ -56,7 +57,7 @@
         })
         .then(() => {
             // ✅ Очищаем форму
-            // document.getElementById("data-form").reset();
+            document.getElementById("data-form").reset();
 
             // ✅ Показываем сообщение пользователю
             document.getElementById("status-message").innerText = "✅ Данные успешно отправлены!";
@@ -74,28 +75,33 @@
             document.getElementById("status-message").innerText = "❌ Ошибка при отправке данных!";
             document.getElementById("status-message").style.color = "red";
         });
+    }
 
-        // Обработчик отправки формы
-        document.getElementById("data-form").addEventListener("submit", function (event) {
-            event.preventDefault(); // Предотвращаем перезагрузку страницы
-            
-            let formData = {
-                id_unique: Date.now(),
-                name: document.getElementById("name").value,
-                deadline: document.getElementById("deadline").value,
-                days_left: calculateDaysLeft(),
-                amount: document.getElementById("amount").value,
-                link: document.getElementById("link").value,
-                notes: document.getElementById("notes").value,
-                region: document.getElementById("region").value,
-                doc_status: document.getElementById("doc_status").value,
-                res_status: document.getElementById("res_status").value,
-                counter: document.getElementById("counter").value,
-                fz: document.getElementById("fz").value
-            };
+    // Обработчик отправки формы
+    document.getElementById("data-form").addEventListener("submit", function (event) {
+        event.preventDefault(); // Предотвращаем перезагрузку страницы
+        
+        let formData = {
+            id_unique: Date.now(),
+            name: document.getElementById("name").value,
+            deadline: document.getElementById("deadline").value,
+            days_left: calculateDaysLeft(),
+            amount: document.getElementById("amount").value,
+            link: document.getElementById("link").value,
+            notes: document.getElementById("notes").value,
+            region: document.getElementById("region").value,
+            doc_status: document.getElementById("doc_status").value,
+            counter: document.getElementById("counter").value,
+            fz: document.getElementById("fz").value
+        };
 
-            sendDataToGoogleSheets(formData);
-        });
-    </script>
+        sendDataToGoogleSheets(formData);
+    });
+</script>
+
+<!-- Элемент для сообщения -->
+    
+<p id="status-message" style="font-weight: bold;"></p>
+
 </body>
 </html>
